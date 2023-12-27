@@ -21,7 +21,7 @@ class ProductSaleLabelViewPdf(models.AbstractModel):
 
                 products.append({
                     'product': product,
-                    'price': price,
+                    'price': int(price),
                     'decimal': int(decimal * 100),
                     'list_price_change_date': product.product_tmpl_id.list_price_change_date
                 })

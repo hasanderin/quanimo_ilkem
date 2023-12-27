@@ -3,6 +3,7 @@
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0).
 
 from odoo import fields, api, models
+from odoo.tools import float_is_zero
 
 
 class UpdateSalePriceWizard(models.TransientModel):
@@ -15,8 +16,9 @@ class UpdateSalePriceWizard(models.TransientModel):
     @api.onchange('rate')
     def onchange_rate(self):
         for line in self.update_line:
-            line.rate = self.rate
-            line.onchange_rate()
+            if float_is_zero(line.rate, precision_digits=2):
+                line.rate = self.rate
+                line.onchange_rate()
 
     def action_update_product_prices(self):
         self.ensure_one()
@@ -56,5 +58,4 @@ class UpdateSalePriceWizardLine(models.TransientModel):
     @api.onchange('rate', 'list_price')
     def onchange_rate(self):
         for rec in self:
-            if rec.price > 0.0:
-                rec.price = rec.list_price + (rec.list_price * rec.rate / 100)
+            rec.price = rec.list_price + (rec.list_price * rec.rate / 100)
