@@ -24,7 +24,7 @@ class ProductTemplate(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for val in vals_list:
-            if 'sequence_id' in val and not val.get('default_code', False):
+            if 'sequence_id' in val and val.get('sequence_id') and not val.get('default_code', False):
                 seq_rec = self.env['ir.sequence'].browse(val['sequence_id'])
                 val['default_code'] = self.env['ir.sequence'].next_by_code(seq_rec.code)
 
@@ -60,7 +60,7 @@ class ProductProduct(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for val in vals_list:
-            if 'sequence_id' in val and not val.get('default_code', False):
+            if 'sequence_id' in val and val.get('sequence_id') and not val.get('default_code', False):
                 seq_rec = self.env['ir.sequence'].browse(val['sequence_id'])
                 val['default_code'] = self.env['ir.sequence'].next_by_code(seq_rec.code)
 
