@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <template id="product_sale_label_view_pdf">
+            <t t-call="web.html_container">
+                <t t-foreach="items" t-as="item">
+
+                    <t t-call="web.basic_layout">
+
+                        <t t-set="product" t-value="item['product']"/>
+
+                        <span style="font-size: 18px;" class="font-weight-bold">
+                            <t t-esc="product.name"/>
+                        </span>
+
+                        <br/>
+
+                        <img t-att-src="'/report/barcode/EAN13/%s' % product.barcode" style="max-width: 160px;width: 160px;height: 40px;"/>
+
+                        <t t-if="product.country_of_origin.id == env.ref('base.tr').id">
+                            <img t-att-src="'/quanimo_soluti_product/static/img/yerli_mali.png'" style="max-width: 100px;width: 100px;height: 40px;object-fit: contain;"/>
+                        </t>
+                        <t t-else="">
+                            <span style="display: inline-block;max-width: 100px;width: 100px;height: 20px;"/>
+                        </t>
+
+                        <span style="font-size: 35px;font-weight: bold;position:relative;top: 50px;">
+                            <t t-esc="item['price']"/>
+                        </span>
+
+                        <div style="display: inline-block;margin: 0;padding: 0;position:relative;top: 50px;">
+                            <span style="margin:0;padding: 0;position:relative;top: -17px;left: 0;">
+                                .<t t-esc="item['decimal']"/>
+                            </span>
+                            <span style="font-size: 15px;border-top: 2px solid black;position:relative;right: 25px;">
+                                <t t-esc="product.currency_id.name"/>/<t t-esc="product.uom_id.name"/>
+                            </span>
+                        </div>
+
+                        <br/>
+
+                        <span style="font-size: 18px; width: 35%;text-align: center;display: inline-block;">
+                            <t t-esc="product.barcode"/>
+                        </span>
+
+                        <br/>
+
+                        <span style="font-size: 18px; width: 35%;text-align: center;display: inline-block;">
+                            <t t-if="product.list_price_change_date">
+                                <t t-esc="product.list_price_change_date.strftime('%d.%m.%Y')"/>
+                            </t>
+                        </span>
+
+                        <br/>
+
+                        <span style="width: 150px;display: inline-block;text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
+                            Price Change Date
+                        </span>
+
+                        <span style="width: 150px;display: inline-block;text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
+                            Origin
+                        </span>
+
+                        <br/>
+
+                        <span style="width: 150px;display: inline-block;text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
+                            <t t-if="product.list_price_change_date">
+                                <t t-esc="product.list_price_change_date.strftime('%d.%m.%Y')"/>
+                            </t>
+                        </span>
+
+                        <span style="width: 150px;display: inline-block;text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
+                            <t t-esc="product.country_of_origin.name"/>
+                        </span>
+
+                    </t>
+
+                </t>
+            </t>
+        </template>
+
+
+        <record id="action_product_sale_label_report" model="ir.actions.report">
+            <field name="name">Product Sale Label</field>
+            <field name="model">product.product</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">quanimo_soluti_product.product_sale_label_view_pdf</field>
+            <field name="report_file">quanimo_soluti_product.product_sale_label_view_pdf</field>
+            <field name="paperformat_id" ref="quanimo_soluti_product.paperformat_product_sale_label"/>
+        </record>
+
+
+    </data>
+</odoo>
