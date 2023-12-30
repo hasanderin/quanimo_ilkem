@@ -14,10 +14,15 @@ class ProductSaleLabelViewPdf(models.AbstractModel):
     def _get_report_values(self, docids, data=None):
         products = []
         for rec in data['product_ids']:
-            product = self.env['product.product'].browse(rec)
+            active_model = data['context']['active_model']
+            product = self.env[active_model].browse(rec)
             if product:
-                decimal, price = math.modf(product.product_tmpl_id.list_price)
-                list_price_change_date = product.product_tmpl_id.list_price_change_date
+                if active_model == 'product.product':
+                    decimal, price = math.modf(product.product_tmpl_id.list_price)
+                    list_price_change_date = product.product_tmpl_id.list_price_change_date
+                else:
+                    decimal, price = math.modf(product.list_price)
+                    list_price_change_date = product.list_price_change_date
 
                 products.append({
                     'product': product,

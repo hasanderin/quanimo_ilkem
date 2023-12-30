@@ -45,7 +45,7 @@ class ProductTemplate(models.Model):
 
     def action_print_label(self):
         data = {
-            'product_ids': [id for id in self.mapped('product_variant_id').ids]
+            'product_ids': [id for id in self.ids]
         }
         return self.env.ref('quanimo_soluti_product.action_product_sale_label_report').report_action(self, data)
 
